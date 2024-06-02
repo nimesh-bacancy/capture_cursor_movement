@@ -41,7 +41,7 @@ This project allows you to track mouse movements and capture images on mouse cli
 
 1. **Start the Flask application:**
     ```bash
-    python app.py
+    python main.py
     ```
 
 2. **Open your web browser and navigate to:**
