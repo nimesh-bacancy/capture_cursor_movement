@@ -19,8 +19,8 @@ This project allows you to track mouse movements and capture images on mouse cli
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-repo/mouse-tracker.git
-    cd mouse-tracker
+    git clone https://github.com/nimesh-bacancy/capture_cursor_movement.git
+    cd capture_cursor_movement
     ```
 
 2. **Create and activate a virtual environment (optional but recommended):**
