@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Captured Images</title>
+</head>
+<body>
+    <h1>Captured Images</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>X Coordinate</th>
+                <th>Y Coordinate</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x, y, img_path in data %}
+            <tr>
+                <td>{{ x }}</td>
+                <td>{{ y }}</td>
+                <td>
+                    <img src="{{ url_for('download_file', filename=img_path.split('/')[-1]) }}" alt="Captured Image" width="500">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
