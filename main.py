@@ -9,52 +9,66 @@ socketio = SocketIO(app)
 
 # Initialize the database
 def init_db():
-    conn = sqlite3.connect('mouse_cursor.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS mouse_cursor
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, img_path TEXT)''')
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect('mouse_cursor.db')
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS mouse_cursor
+                    (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, img_path TEXT)''')
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"error occured{e}")
 
 # Save mouse data to the database
 def save_mouse_data(x, y, img_path):
-    conn = sqlite3.connect('mouse_cursor.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO mouse_cursor (x, y, img_path) VALUES (?, ?, ?)", (x, y, img_path))
-    conn.commit()
-    conn.close()
-
+    try:
+        conn = sqlite3.connect('mouse_cursor.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO mouse_cursor (x, y, img_path) VALUES (?, ?, ?)", (x, y, img_path))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"error occured in save mouse data{e}")
 
 
 @app.route('/view_images')
 def view_images():
-    conn = sqlite3.connect('mouse_cursor.db')
-    c = conn.cursor()
-    c.execute("SELECT x, y, img_path FROM mouse_cursor WHERE img_path IS NOT NULL")
-    data = c.fetchall()
-    conn.close()
-    return render_template('view_data.html', data=data)
+    try:
+        conn = sqlite3.connect('mouse_cursor.db')
+        c = conn.cursor()
+        c.execute("SELECT x, y, img_path FROM mouse_cursor WHERE img_path IS NOT NULL")
+        data = c.fetchall()
+        conn.close()
+        return render_template('view_data.html', data=data)
+    except Exception as e:
+        print(f"error occured in view images{e}")
 
 @socketio.on('mouse_event')
 def handle_mouse_event(data):
-    x, y = data['x'], data['y']
-    img_path = None
-    if data['button_pressed']:
-        img_path = capture_image(x, y)
-    save_mouse_data(x, y, img_path)
+    try:
+        x, y = data['x'], data['y']
+        img_path = None
+        if data['button_pressed']:
+            img_path = capture_image(x, y)
+        save_mouse_data(x, y, img_path)
+    except Exception as e:
+        print(f"error occur in handle mouse event{e}")
 
 # capture images when button is pressed
 def capture_image(x, y):
-    cap = cv2.VideoCapture(0)
-    ret, frame = cap.read()
-    cap.release()
-    if ret:
-        if not os.path.exists('images'):
-            os.makedirs('images')
-        img_path = f'images/img_{x}_{y}.jpg'
-        cv2.imwrite(img_path, frame)
-        return img_path
-    return None
+    try:
+        cap = cv2.VideoCapture(0)
+        ret, frame = cap.read()
+        cap.release()
+        if ret:
+            if not os.path.exists('images'):
+                os.makedirs('images')
+            img_path = f'images/img_{x}_{y}.jpg'
+            cv2.imwrite(img_path, frame)
+            return img_path
+        return None
+    except Exception as e:
+        print(f"error occured in capture images{e}")
 
 @app.route('/')
 def index():
