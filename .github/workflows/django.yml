@@ -1,4 +1,4 @@
-name: Django CI
+name: Flask CLI
 
 on:
   push:
@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python main.py test
+        pytest  # or python -m unittest discover
